@@ -1,3 +1,4 @@
+from time import sleep
 import numpy as np
 from tqdm import tqdm
 
@@ -29,14 +30,14 @@ class NeuralNetwork:
         self.w2 = 2 * np.random.random((10, 10)) - 1
         self.w3 = 2 * np.random.random((3, 10)) - 1
 
-    def fit(self, iterations=1000):
+    def fit(self, type='nonlinear', iterations=1000):
         # Iterating over training samples
         print("Training...")
         for i in tqdm(range(iterations)):               #loading bar
             for X, y in zip(self.Xtrain ,self.ytrain):
                 # Feedforward
-                a1, a2, a3, a4 = self.feedforward(X)
-                
+                a1, a2, a3, a4 = self.feedforward(X,type)
+            
                 # Backpropagation
                 d2, d3, d4 = self.backpropagation(a2, a3, a4, y)
 
@@ -44,16 +45,25 @@ class NeuralNetwork:
                 self.w2 += np.dot(np.transpose(np.asmatrix(d3)), np.asmatrix(a2))
                 self.w3 += np.dot(np.transpose(np.asmatrix(d4)), np.asmatrix(a3))
         print("\nTraining complete!\n")
-
+    
     # Feedforward to find a2, a3, a4
-    def feedforward(self, X):
-        a1 = X
-        z2 = np.dot(self.w1, a1)
-        a2 = self.sigmoid(z2)
-        z3 = np.dot(self.w2, a2)
-        a3 = self.sigmoid(z3)
-        z4 = np.dot(self.w3, a3)
-        a4 = self.sigmoid(z4)
+    def feedforward(self, X, type='nonlinear'):
+        #activation f(x) = sigmoid(x)
+        if type == 'nonlinear':
+            a1 = X
+            z2 = np.dot(self.w1, a1)
+            a2 = self.sigmoid(z2)
+            z3 = np.dot(self.w2, a2)
+            a3 = self.sigmoid(z3)
+            z4 = np.dot(self.w3, a3)
+            a4 = self.sigmoid(z4)
+        elif type == 'linear':  #activation f(x) = Wx+b
+            a1 = X
+            a2 = np.dot(self.w1,a1)
+            a3 = np.dot(self.w2,a2)
+            a4 = np.dot(self.w3,a3)
+            #print(a1,a2,a3,a4)
+                    
         return (a1, a2, a3, a4)
 
     # Backpropagation to find d2, d3, d4
@@ -63,20 +73,26 @@ class NeuralNetwork:
         d2 = np.multiply(np.dot(np.transpose(self.w2), d3), np.multiply(a2, 1-a2))
         return (d2, d3, d4)
 
-    def predict(self, X):
+    def predict(self, X, type='nonlinear'):
         predictions = []
         for sample in X:
-            prediction = self.feedforward(sample)[3]
+            prediction = self.feedforward(sample,type)[3]
+            print(prediction)
             predictions.append(prediction)
         return predictions
 
     def calculateAccuracy(self, predictions, y):
         accuracy = 0
         for prediction, output in zip(predictions, y):
-            accuracy += list(np.subtract(prediction, output)).count(0) / len(prediction)
+            l = np.subtract(prediction, output)
+            print(l)
+            print(np.count_nonzero(l == 0))
+            accuracy += np.count_nonzero(l == 0) / len(prediction)
         accuracy /= len(predictions)
         return accuracy
 
-    # Sigmoid activation function
+    # Sigmoid activation function: NON LINEAR
     def sigmoid(self, x):
         return 1 / (1 + np.exp(-x))
+
+ 
