@@ -19,7 +19,6 @@ data = {"B365": B365data, "BW": BWdata, "IW": IWdata, "LB": LBdata}
 kf = KFold(n_splits=10)
 
 
-#kane collaborator ton zorz
 '''
 # Least Mean Squares Method
 print('\n\n', 15 * '_' + 'LEAST_MEAN_SQUARES_METHOD' + 15 *'_', '\n')
@@ -67,11 +66,12 @@ for bc in betCompanies:
 
 '''
 
-#Linear Neural Network
+#Linear Neural Network: TASK 1
 print('\n\n', 15 * '_' + 'LINEAR NEURAL_NETWORK' + 15 *'_', '\n')
 
+
 network = NeuralNetwork()
-for bc in betCompanies:
+for bc in betCompanies[:1]:
     iteration = 1
     averageAccuracy = 0
     # 10fold cross validation
@@ -82,7 +82,7 @@ for bc in betCompanies:
         network.loadData(TeamAttributesData[train_index], TeamAttributesData[test_index])
 
         # Calculating weights
-        network.fit('linear')
+        network.fit(iteration,'linear')
 
         #Calculating accuracy
         accuracy = network.calculateAccuracy(network.predict(network.Xtest,'linear'), network.ytest)
@@ -99,8 +99,6 @@ for bc in betCompanies:
 
 #Neural Network
 print('\n\n', 15 * '_' + 'NEURAL_NETWORK' + 15 *'_', '\n')
-network = NeuralNetwork()
-
 iteration = 1
 averageAccuracy = 0
 # 10fold cross validation
