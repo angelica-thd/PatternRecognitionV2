@@ -64,17 +64,9 @@ for bc in betCompanies:
     print(f'\nAverage accuracy: {100 * averageAccuracy}%\n{50*"_"}\n')
 
 '''
-#K means clustering: TASK 4
-print('\n\n', 15 * '_' + 'K_MEANS_CLUSTERING' + 15 *'_', '\n')
-
-cMeans = cMeans()
-for bc in betCompanies:
-    iteration = 1
-    averageAccuracy = 0
-    for company in kf.split(data[bc.name]):        
-        # Changing training and testing sets
-        
-        cMeans.cluster()
+ 
+ 
+ 
 
 #Linear Neural Network: TASK 1
 print('\n\n', 15 * '_' + 'LINEAR_NEURAL_NETWORK' + 15 *'_', '\n')
