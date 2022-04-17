@@ -6,6 +6,9 @@ from LMS import LMSfit
 from LS import LSfit
 from NeuralNetwork import NeuralNetwork
 from cMeans import cMeans
+from betCompanyNN import NeuralNetworkBC
+from betCompanyNNmulti import BettingCompanyNeuralNetwork
+
 
 B365data, BWdata, IWdata, LBdata, TeamAttributesData = fetchData()
 # Initializing betting companies
@@ -98,6 +101,39 @@ for bc in betCompanies[:1]:
     print(f'\nAverage accuracy: {100 * averageAccuracy}%\n{50*"_"}\n')
 
         
+
+#Multi layer Neural Network BET COMPANY # TASK 2
+print('\n\n', 15 * '_' + 'Neural Network BET COMPANY' + 15 *'_', '\n')
+testArray = []
+for bc in betCompanies:
+    iteration = 1
+    averageAccuracy = 0
+    for train_index, test_index in kf.split(data[bc.name][:100]):        
+        network = BettingCompanyNeuralNetwork()     
+        network.loadData(data[bc.name][train_index], data[bc.name][test_index])  #101660 size! wtf
+        print(f'{bc.name} | Neural Network iteration {iteration}\n')
+        iteration += 1
+
+        # Calculating weights
+        network.fit()
+        # Calculating accuracy
+        accuracy = network.calculateAccuracy(network.predict(network.Xtest), network.ytest)
+        averageAccuracy += accuracy / 10
+        print(f'Accuracy: {100 * accuracy}%\n\n')
+
+    print(f'\nAverage accuracy: {100 * averageAccuracy}%\n{50*"_"}\n')
+    testArray.append((bc.name, averageAccuracy))
+
+max = 0
+bestCompany = ''
+for test in testArray:
+    temp = test[1]
+    if max < temp:
+        max = temp
+        bestCompany = test[0]
+
+
+print(f'\nCompany with max accuracy: {bestCompany} , accuracy: {100 * max}%\n{50*"_"}\n')
 
 #Neural Network
 print('\n\n', 15 * '_' + 'NEURAL_NETWORK' + 15 *'_', '\n')
