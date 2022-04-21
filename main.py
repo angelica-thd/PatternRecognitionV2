@@ -7,6 +7,7 @@ from LS import LSfit
 from NeuralNetwork import NeuralNetwork
 from betCompanyNN import NeuralNetworkBC
 from betCompanyNNmulti import BettingCompanyNeuralNetwork
+from random import randint
 
 
 B365data, BWdata, IWdata, LBdata, TeamAttributesData = fetchData()
@@ -104,7 +105,7 @@ testArray = []
 for bc in betCompanies:
     iteration = 1
     averageAccuracy = 0
-    for train_index, test_index in kf.split(data[bc.name][:100]):        
+    for train_index, test_index in kf.split(data[bc.name][randint(50, 100):randint(101,200)]):        
         network = BettingCompanyNeuralNetwork()     
         network.loadData(data[bc.name][train_index], data[bc.name][test_index])  #101660 size! wtf
         print(f'{bc.name} | Neural Network iteration {iteration}\n')
