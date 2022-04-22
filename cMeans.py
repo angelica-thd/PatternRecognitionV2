@@ -1,6 +1,7 @@
 import numpy as np
 from matplotlib import pyplot as plt
 from sklearn.cluster import KMeans
+from distfit import distfit
 
 class cMeans:
 
@@ -22,4 +23,8 @@ class cMeans:
         plt.scatter(kmeans.cluster_centers_[:, 0], kmeans.cluster_centers_[:, 1], s=300, c='black')
         plt.title(label)
         plt.show()
+        dist = distfit()
+        dist.fit_transform(cl)
+        print(f'{label} Distributions: ')
+        print(dist.summary)
 
